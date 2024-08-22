@@ -1,3 +1,10 @@
+*.svg
+*.tif
+*.zip
+Data/*
+*.xlsx
+*.pdf
+*.gif
 *.csv
 *.nc
 *.dat
