@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
   <img src="Assets/OC Logo lockup.png" alt="Ocean Central Logo" width="300">
 </p>
 
