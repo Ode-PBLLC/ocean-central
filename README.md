@@ -16,13 +16,13 @@ Safeguarding marine species is critical for biodiversity, climate regulation, an
 
 ### **Protect Spaces:** 
 Marine protection preserves essential ecosystems, fostering long-term ocean health.  
-[Link to Notebook]
+[[Link to Notebook]](https://github.com/Ode-PBLLC/ocean-central/blob/main/Code/protect_spaces_FINAL.ipynb)
 
 ---
 
 ### **Restore Ecosystems:** 
 Restoring habitats boosts biodiversity, coastal defense, and carbon storage.  
-[Link to Notebook]
+[[Link to Notebook]](https://github.com/Ode-PBLLC/ocean-central/blob/main/Code/restore_ecosystems_FINAL.ipynb)
 
 ---
 
