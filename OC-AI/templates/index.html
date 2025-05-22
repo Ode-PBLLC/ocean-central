@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <script>
+        async function sendQuery() {
+            let question = document.getElementById("question").value;
+            if (!question) {
+                alert("Please enter a question!");
+                return;
+            }
+
+            let response = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: question })
+            });
+
+            let data = await response.json();
+            document.getElementById("response").innerText = "Response: " + (data.answer || data.error);
+        }
+    </script>
+</head>
+<body>
+    <h1>Chatbot Interface</h1>
+    <input type="text" id="question" placeholder="Enter your question" style="width: 300px;">
+    <button onclick="sendQuery()">Ask</button>
+    <p id="response"></p>
+</body>
+</html>
