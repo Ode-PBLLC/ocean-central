@@ -54,3 +54,5 @@ This is a Flask-based API application designed to answer user questions related 
 - Only marine science and ocean-related questions will be answered. Others will be rejected.
 - Responses include snippet metadata to help users trace the source of information.
 - The app automatically filters unreliable sources during web search fallback.
+
+#### Disclaimer: Ocean Central’s chatbot draws from trusted sources, including IPCC reports, peer-reviewed research by Professor Carlos Duarte, and a leading oceanography textbook. If needed, it searches the web for credible information while excluding low-quality sources. Responses are AI-generated, may contain inaccuracies, and do not reflect the views of Wave. This tool is not a substitute for expert advice, and Wave disclaims any responsibility for actions taken based on this content.
