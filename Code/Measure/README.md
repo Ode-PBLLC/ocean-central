@@ -22,7 +22,7 @@ Given a 50% historical decline in salt marsh coverage, documented by Crooks et. 
 A spline interpolation was created based on visually inspected values produced by Mcafee (2020) on oyster reef extent. Note that the increasing trend is almost driven by non-native Pacific oyster species, while native oyster populations continue to decline.
 
 **Coral:**
-Historical coral data was pulled from Figure 1 of Eddy et al. (2021). A spline was then fit over the period 1900 to 2020.
+Historical coral data was aggregated from Eddy et al. (2021); the UK Natural History Museum; and Status of Coral Reefs of the World: 2020 and 2000 reports from Global Coral Reef Monitoring Network (GCRMN). A spline was then fit over the period 1900 to 2020.
 
 **Seagrass:**
 Seagrass historical time series for seven bioregions were aggregated by Dunic et al. (2017). We then took the average of these time series and fit a spline to the data. All values were then rescaled so that the year 1900 represented the ecosystem at 100% health.
