@@ -2,7 +2,9 @@ The following details data methodology for the Measure section of the Ocean Cent
 
 There are few existing ecosystems described by global, historical datasets. These analyses are intended to illustrate the overall trends of each ecosystem over time, rather than to provide precise values at any single point in time. 
 
-For each dataset, a spline interpolation was created using the UnivariateSpline function from the SciPy library and graphed to help users visualize changes over time. The spline degree was chosen based on visual fit to the data, given that we do not project values nor expect the polynomial degree assigned to match the complexity of ocean ecosystem dynamics. See the accompanying files for code implementation.
+For each dataset, a spline interpolation was created using the UnivariateSpline function from the SciPy library and graphed to help users visualize changes over time. The spline degree was chosen based on visual fit to the data, given that we do not project values nor expect the polynomial degree assigned to match the complexity of ocean ecosystem dynamics. 
+
+See the accompanying files for code implementation of each methodology. [measure.ipynb](https://github.com/Ode-PBLLC/ocean-central/blob/8d439da363d6ef0be860ac35347025d43fd52390/Code/Measure/measure.ipynb) details each ecosystem, using scripts from https://github.com/jdunic/2021_Global-seagrass-trends/ and seagrass_processing.r as an input.
 
 **Mangroves:**
 A spline interpolation was created using 1) a 1970 extent value from Spalding et. al (1997) and FAO decadal mangrove extent datasets, using 2) a 1980 extent value from a dataset covering 1980-2005 (2007), and 3) data onwards from a dataset covering 1990-2020 (2020). 
