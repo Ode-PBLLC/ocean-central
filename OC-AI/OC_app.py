@@ -113,7 +113,7 @@ def generate_openai_response(context, user_query, model="gpt-4o", max_tokens=500
                     2. IPCC reports.
                     3. Carlos Duarte scientific papers.
 
-                    If the snippets clearly contain the answer to the user's question, answer it directly and concisely. Reference the relevant snippet numbers to support your answer (e.g., "As stated in Snippet 2...").
+                    If the snippets clearly contain the answer to the user's question, answer it directly and concisely using language that's accessible to a broad audience. Reference the relevant snippet numbers to support your answer (e.g., "As stated in Snippet 2...").
 
                     If the answer is not explicitly found in the snippets, respond with "The snippets do not provide a clear answer to your question."
 
@@ -204,7 +204,7 @@ def query():
                 # If web search and from today, return cached response
                     return jsonify(cached_response["response"])
                 else:
-                    return None
+                    pass
             else:
                 return jsonify(cached_response["response"])
         else:
@@ -253,14 +253,42 @@ def query():
     openai_response = generate_openai_response(combined_summary, user_query)
 
     if "the snippets do not provide a clear answer to your question" in openai_response.lower():
-        # Fallback to web search if model says RAG was insufficient
-        openai_response = generate_openai_response_with_web_search(user_query)
+        # Fallback: Use web search only
+        web_response_raw = generate_openai_response_with_web_search(user_query)
+        openai_response = review_web_search_response(web_response_raw)
         source_used = "web_search"
-
-        # Check web search for bad sources and revise
-        openai_response = review_web_search_response(openai_response)
     else:
-        source_used = "rag"
+        # Combine: Use both RAG and web search responses
+        web_response_raw = generate_openai_response_with_web_search(user_query)
+        web_response_clean = review_web_search_response(web_response_raw)
+
+        # Consolidate RAG and web search answers using GPT
+        consolidation_prompt = f"""
+        You are a marine science assistant. The user asked: "{user_query}"
+
+        You have two answers:
+        1. From retrieved documents (RAG): {openai_response}
+        2. From a real-time web search: {web_response_clean}
+
+        Keep the citations from both the RAG and web search answers. 
+        Instead of saying “According to retrieved documents,” reference the sources, either broadly (e.g., “According to leading marine scientists”) or specifically (e.g., “According to research published in 2020”). 
+        When a link to a reference is unavailable, refer to the name of the study or the publication in which it was published. When referring to an author for the first time, use their full name. 
+        Still include snippet numbers from the RAG response (e.g., "As stated in Snippet 2...").
+
+        """
+
+        final_response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant for ocean and marine science."},
+                {"role": "user", "content": consolidation_prompt}
+            ],
+            temperature=0.7,
+            max_tokens=700
+        )
+
+        openai_response = final_response.choices[0].message.content.strip()
+        source_used = "rag + web_search"
 
     # === 4. Build response ===
     structured_response = {

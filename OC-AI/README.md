@@ -12,9 +12,11 @@ This is a Flask-based API application designed to answer user questions related 
     - *Carlos Duarte’s scientific papers*
 
 - **Query Answering**:
-  - Uses `gpt-4o` to generate an answer from combined snippet context.
-  - Falls back to `gpt-4o-mini-search-preview` with web search if no snippet-based answer is available.
-  - Includes filtering for reliable sources in the web fallback.
+  - Uses `gpt-4o` to generate answers from combined snippet context in accessible language.
+  - Combines both RAG and web search responses when snippets contain relevant information.
+  - Falls back to web search only if snippets don't provide a clear answer.
+  - Consolidates RAG and web search results using GPT-4o for comprehensive responses.
+  - Includes filtering for reliable sources in web search results.
 
 - **Response Caching**:
   - Stores query results (including timestamp and source used) to avoid recomputation.
@@ -45,7 +47,7 @@ This is a Flask-based API application designed to answer user questions related 
     },
     ...
   ],
-  "source_used": "rag"  // or "web_search"
+  "source_used": "rag + web_search"  // or "rag" or "web_search"
 }
 ```
 
@@ -53,6 +55,8 @@ This is a Flask-based API application designed to answer user questions related 
 
 - Only marine science and ocean-related questions will be answered. Others will be rejected.
 - Responses include snippet metadata to help users trace the source of information.
-- The app automatically filters unreliable sources during web search fallback.
+- The app now combines RAG and web search results for more comprehensive answers with proper citations.
+- Citations reference sources broadly (e.g., "leading marine scientists") or specifically (e.g., "research published in 2020") when direct links are unavailable.
+- The app automatically filters unreliable sources during web search.
 
 #### Disclaimer: Ocean Central’s chatbot draws from trusted sources, including IPCC reports, peer-reviewed research by Professor Carlos Duarte, and a leading oceanography textbook. If needed, it searches the web for credible information while excluding low-quality sources. Responses are AI-generated, may contain inaccuracies, and do not reflect the views of Wave. This tool is not a substitute for expert advice, and Wave disclaims any responsibility for actions taken based on this content.

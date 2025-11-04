@@ -38,6 +38,35 @@ Decreasing pollution supports biodiversity, clean water, and sustainable fisheri
 
 ---
 
-### **Mitigate Climate Change:** 
-Limiting climate impacts is essential for maintaining the ocean’s role in climate regulation.  
+### **Mitigate Climate Change:**
+Limiting climate impacts is essential for maintaining the ocean's role in climate regulation.
 [Link to Notebook](https://github.com/Ode-PBLLC/ocean-central/blob/main/Code/mitigate_climate_change_FINAL.ipynb)
+
+---
+
+## Ocean Central AI Assistant
+
+Ocean Central includes an AI-powered query system that provides accessible, scientifically-grounded answers to marine science and oceanography questions.
+
+### Features:
+
+- **Hybrid Knowledge System**: Combines retrieval-augmented generation (RAG) from authoritative sources with real-time web search for comprehensive, up-to-date answers
+- **Authoritative Sources**:
+  - Ocean Studies - Introduction to Oceanography (Segar et al., 2018)
+  - IPCC reports
+  - Carlos Duarte scientific papers
+  - Ocean Central platform content
+- **Accessible Language**: Responses are tailored to be understandable by a broad audience while maintaining scientific accuracy
+- **Source Verification**: Web search results are reviewed to ensure only reputable sources (peer-reviewed articles, government institutions, academic publishers, established news organizations) are cited
+- **Smart Caching**: Efficient caching system that refreshes web search results daily while maintaining stable answers from document sources
+- **Citation Support**: All answers include proper citations with snippet references and source attribution
+
+### How It Works:
+
+1. **Multi-Source Search**: Queries are simultaneously searched across Ocean Central content, oceanography textbooks, IPCC reports, and Duarte papers
+2. **RAG Response**: Initial answer generated from retrieved document snippets
+3. **Web Enhancement**: Real-time web search supplements the RAG response with current information
+4. **Response Consolidation**: Both sources are intelligently combined into a single, coherent answer with proper citations
+5. **Quality Control**: Web sources are vetted to exclude unreliable content
+
+The AI assistant is available through the `/query` API endpoint and is designed to support researchers, educators, and ocean advocates with reliable marine science information.
