@@ -10,7 +10,7 @@ from rasterio.features import rasterize
 from rasterio.warp import calculate_default_transform, reproject, Resampling
 import numpy as np
 
-def shapefile_to_raster(
+def vector_to_raster(
     shp_path,
     out_raster_path,
     pixel_size_m=5000,
@@ -26,7 +26,7 @@ def shapefile_to_raster(
     # --- allow large GeoJSON files ---
     os.environ["OGR_GEOJSON_MAX_OBJ_SIZE"] = "0"
 
-    # 1. Read shapefile
+    # 1. Read shapefile, gpkg, geojson - any of these formats
     gdf = gpd.read_file(shp_path)
 
     if gdf.empty:
@@ -120,10 +120,11 @@ def shapefile_to_raster(
 
 if __name__ == "__main__":
     # Ask user for inputs
+    #shapefile, gpkg, geojson
     shp_path = input("Enter the path to the vector file (e.g., .shp, .gpkg): ").strip()
     out_raster_path = input("Enter output raster filename (e.g., output.tif): ").strip()
 
-    shapefile_to_raster(
+    vector_to_raster(
         shp_path=shp_path,
         out_raster_path=out_raster_path,
         pixel_size_m=5000,
