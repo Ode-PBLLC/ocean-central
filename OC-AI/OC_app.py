@@ -140,15 +140,67 @@ def generate_openai_response(context, user_query, model="gpt-4o", max_tokens=500
     return response.choices[0].message.content.strip()
 
 def generate_openai_response_with_web_search(user_query, model="gpt-4o-mini-search-preview", max_tokens=500):
+    # Priority organizations for web search
+    priority_domains = [
+        "un.org",                    # United Nations
+        "cbd.int",                   # Convention for Biological Diversity
+        "worldwildlife.org",         # WWF - World Wildlife Fund
+        "panda.org",                 # WWF alternative domain
+        "conservation.org",          # Conservation International
+        "nature.org",                # The Nature Conservancy
+        "imo.org",                   # International Maritime Organisation
+        "nationalgeographic.com",    # National Geographic
+        "nationalgeographic.org",    # National Geographic (org)
+        "springernature.com",        # Springer Nature
+        "springer.com",              # Springer
+        "nature.com",                # Journal of Nature
+        "nasa.gov",                  # NASA - North American Space Agency
+        "esa.int",                   # ESA - European Space Agency
+        "noaa.gov",                  # NOAA - National Oceanic and Atmospheric Administration
+        "cites.org",                 # CITES - Convention on International Trade in Endangered Species
+        "cms.int",                   # CMS - Convention on the Conservation of Migratory Species
+        "pewtrusts.org",             # PEW - PEW Charitable Trusts
+        "fao.org",                   # FAO - Food and Agriculture Organization
+        "unesco.org",                # UNESCO-IOC - Intergovernmental Oceanographic Commission of UNESCO
+        "ioc.unesco.org",            # UNESCO-IOC specific
+        "ices.dk",                   # ICES - International Council for the Exploration of the Sea
+        "iwc.int",                   # IWC - International Whaling Commission
+        "isa.org.jm",                # ISA - International Seabed Authority
+        "worldbank.org",             # World Bank
+    ]
+
     response = client.chat.completions.create(
         model=model,
         messages=[
             {
                 "role": "system",
-                "content": """
+                "content": f"""
                     You are a helpful assistant with access to real-time web search. Answer user questions using the most current and reliable web information available.
-                    Please only use trusted sources, such as government websites, academic institutions, or reputable news agencies.
-                    Exclude claims sourced from unverified sources like personal blogs, tourism blogs, Wikipedia, or Wordpress sites, for example.            
+
+                    PRIORITY: Focus your search on information from these trusted organizations:
+                    - United Nations (UN)
+                    - Convention for Biological Diversity (CBD)
+                    - World Wildlife Fund (WWF)
+                    - Conservation International
+                    - The Nature Conservancy
+                    - International Maritime Organisation (IMO)
+                    - National Geographic
+                    - Springer Nature and Journal of Nature
+                    - NASA (North American Space Agency)
+                    - ESA (European Space Agency)
+                    - NOAA (National Oceanic and Atmospheric Administration)
+                    - CITES (Convention on International Trade in Endangered Species)
+                    - CMS (Convention on the Conservation of Migratory Species)
+                    - PEW Charitable Trusts
+                    - FAO (Food and Agriculture Organization)
+                    - UNESCO-IOC (Intergovernmental Oceanographic Commission of UNESCO)
+                    - ICES (International Council for the Exploration of the Sea)
+                    - IWC (International Whaling Commission)
+                    - ISA (International Seabed Authority)
+                    - World Bank
+
+                    Please prioritize sources from these organizations and other government websites, academic institutions, or reputable news agencies.
+                    Exclude claims sourced from unverified sources like personal blogs, tourism blogs, Wikipedia, or Wordpress sites.
                     Be concise and cite web results when relevant (e.g., "According to web results..."). Do not make any claims that are not cited.
                     Only answer marine science and oceanography-related questions. For other topics, respond with:
                     "This question is outside of my scope. Please ask something related to marine science or ocean-related topics."
@@ -159,20 +211,65 @@ def generate_openai_response_with_web_search(user_query, model="gpt-4o-mini-sear
                 "content": user_query
             }
         ],
-        web_search_options={} 
+        web_search_options={
+            "allowed_domains": priority_domains
+        }
     )
     return response.choices[0].message.content.strip()
 
 def review_web_search_response(openai_response, model="gpt-4o-mini-search-preview", max_tokens=500):
+    # Priority organizations for web search
+    priority_domains = [
+        "un.org",                    # United Nations
+        "cbd.int",                   # Convention for Biological Diversity
+        "worldwildlife.org",         # WWF - World Wildlife Fund
+        "panda.org",                 # WWF alternative domain
+        "conservation.org",          # Conservation International
+        "nature.org",                # The Nature Conservancy
+        "imo.org",                   # International Maritime Organisation
+        "nationalgeographic.com",    # National Geographic
+        "nationalgeographic.org",    # National Geographic (org)
+        "springernature.com",        # Springer Nature
+        "springer.com",              # Springer
+        "nature.com",                # Journal of Nature
+        "nasa.gov",                  # NASA - North American Space Agency
+        "esa.int",                   # ESA - European Space Agency
+        "noaa.gov",                  # NOAA - National Oceanic and Atmospheric Administration
+        "cites.org",                 # CITES - Convention on International Trade in Endangered Species
+        "cms.int",                   # CMS - Convention on the Conservation of Migratory Species
+        "pewtrusts.org",             # PEW - PEW Charitable Trusts
+        "fao.org",                   # FAO - Food and Agriculture Organization
+        "unesco.org",                # UNESCO-IOC - Intergovernmental Oceanographic Commission of UNESCO
+        "ioc.unesco.org",            # UNESCO-IOC specific
+        "ices.dk",                   # ICES - International Council for the Exploration of the Sea
+        "iwc.int",                   # IWC - International Whaling Commission
+        "isa.org.jm",                # ISA - International Seabed Authority
+        "worldbank.org",             # World Bank
+    ]
+
     response = client.chat.completions.create(
         model=model,
         messages=[
             {
                 "role": "system",
                 "content": """
-                     You are a helpful and discerning assistant with access to web search that reviews AI-generated responses for source quality. 
-                     Your task is to check the previous response for any low-quality or untrustworthy sources (such as blogs, Wordpress sites, Wikipedia, unverified sites, user-generated content, or content farms). 
-                     Revise the answer to only include claims supported by reputable, high-quality sources such as peer-reviewed articles, government institutions, academic publishers, or established news organizations. 
+                     You are a helpful and discerning assistant with access to web search that reviews AI-generated responses for source quality.
+                     Your task is to check the previous response for any low-quality or untrustworthy sources (such as blogs, Wordpress sites, Wikipedia, unverified sites, user-generated content, or content farms).
+
+                     PRIORITY: Prefer sources from these trusted organizations:
+                     - United Nations (UN), Convention for Biological Diversity (CBD)
+                     - World Wildlife Fund (WWF), Conservation International, The Nature Conservancy
+                     - International Maritime Organisation (IMO)
+                     - National Geographic, Springer Nature, Journal of Nature
+                     - NASA, ESA (European Space Agency)
+                     - NOAA (National Oceanic and Atmospheric Administration)
+                     - CITES, CMS (Convention on the Conservation of Migratory Species)
+                     - PEW Charitable Trusts
+                     - FAO (Food and Agriculture Organization)
+                     - UNESCO-IOC, ICES, IWC, ISA
+                     - World Bank
+
+                     Revise the answer to only include claims supported by reputable, high-quality sources such as peer-reviewed articles, government institutions, academic publishers, or established news organizations.
                      If a claim cannot be verified with and cited from a trustworthy source, omit the claim. Do not make any claims that are not cited.
                      If the response is the "question is outside of my scope", don't change it.
                 """
@@ -182,7 +279,9 @@ def review_web_search_response(openai_response, model="gpt-4o-mini-search-previe
                 "content": f"Here is the previous answer: \n\n{openai_response}\n\n Please check for low-quality sources. Revise the answer accordingly, citing only reputable sources and excluding any from the specified domains. If any claims are unverifiable, remove it."
             }
         ],
-        web_search_options={} 
+        web_search_options={
+            "allowed_domains": priority_domains
+        }
     )
     return response.choices[0].message.content.strip()
 
