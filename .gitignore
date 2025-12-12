@@ -1,1 +1,6 @@
+.csv
+.DS_Store
+.geotiff
+.json
+.tif
 Data/*
