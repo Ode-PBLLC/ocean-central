@@ -53,6 +53,10 @@ def runion(geoms):
 
 
 def fix(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    # buffer(0) repairs validity and coerces to polygons. NOTE: it inflates antimeridian-
+    # crossing degree-circle polygons after reprojection to Mollweide — this is fine for the
+    # coastal/EEZ layers here (none cross the dateline pathologically) but NOT for the seamount
+    # base-area vector, which is computed separately (see docs / QGIS method) at ~16.4%.
     gdf = gdf.copy()
     gdf["geometry"] = gdf.geometry.buffer(0)
     return gdf[~gdf.geometry.is_empty & gdf.geometry.notna()]
@@ -132,8 +136,16 @@ def load_ecosystem(path: Path):
     if path.suffix.lower() in VECTOR_EXT:
         g = gpd.read_file(path).to_crs(AREA_CRS)
         g = g[g.geometry.geom_type.isin(["Polygon", "MultiPolygon"])]
+        # make_valid (not buffer0) for the ECOSYSTEM only: buffer0 inflates antimeridian-
+        # crossing degree-circle polygons (seamount bases ~3x) after reprojection; make_valid
+        # + dropping the resulting non-polygon collection artifacts repairs them. Identical for
+        # coastal ecosystems (no pathological crossers). Juris/protected keep buffer0 (fix()),
+        # whose complex multipolygons must NOT be dropped.
+        g["geometry"] = g.geometry.make_valid()
+        g = g[~g.geometry.is_empty & g.geometry.notna()]
+        g = g[g.geometry.geom_type.isin(["Polygon", "MultiPolygon"])]
         log(f"  {len(g):,} polygon features (vector)")
-        return fix(g)[["geometry"]], False
+        return g[["geometry"]], False
     return vectorize(path), True
 
 
